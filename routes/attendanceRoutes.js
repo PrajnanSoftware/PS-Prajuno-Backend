@@ -1,6 +1,6 @@
 const express = require("express");
 const { markCheckIn, markCheckOut, getAttendance } = require("../controllers/attendanceController");
-const protect = require('../middlewares/authMiddleware');
+const { protect } = require("../middlewares/authMiddleware");
 
 const router = express.Router();
 
