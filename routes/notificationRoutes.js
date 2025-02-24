@@ -1,6 +1,6 @@
 const express = require("express");
 const { getNotifications, createNotification, markAsRead, clearAllNotifications, deleteNotification} = require('../controllers/notificationController');
-const { protect } = require("../middlewares/authMiddleware");
+const protect = require('../middlewares/authMiddleware');
 
 const router = express.Router();
 
