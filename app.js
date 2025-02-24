@@ -6,6 +6,9 @@ const profileRoutes = require('./routes/profileRoutes');
 const protectedRoute = require('./routes/protectedRoute');
 const emailRoutes = require('./routes/emailRoutes');
 const notificationRoutes = require('./routes/notificationRoutes');
+const employeeRoutes = require("./routes/employeeRoutes");
+const attendanceRoutes = require("./routes/attendanceRoutes");
+const leaveRoutes = require("./routes/leaveRoutes");
 const cors = require('cors');
 const { Server } = require('socket.io');
 
@@ -21,7 +24,7 @@ app.use(cors());
 
 // Default root route
 app.get('/', (req, res) => {
-  res.send('Welcome to PS Career Dashboard Backend API!'); // You can customize this message
+  res.send('Welcome to PS Prajuno HRMS Backend API!'); // You can customize this message
 });
 
 // Routes
@@ -30,6 +33,9 @@ app.use('/api/v1/profile', profileRoutes);
 app.use('/api', protectedRoute);
 app.use("/api/v1/emailRoutes", emailRoutes);
 app.use("/api/v1/notifications", notificationRoutes);
+app.use("/api/v1/employees", employeeRoutes);
+app.use("/api/v1/attendance", attendanceRoutes);
+app.use("/api/v1/leaves", leaveRoutes);
 
 // WebSocket for notifications and chat
 const server = app.listen(process.env.PORT || 5000, () => {

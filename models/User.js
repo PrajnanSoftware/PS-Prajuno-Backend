@@ -16,8 +16,8 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['restaurant', 'user'],
-    default: 'user',
+    enum: ['HR', 'Manager','CEO','Employee','Intern'],
+    default: 'Intern',
   },
   resetToken: String,
   resetTokenExpiry: Date,
