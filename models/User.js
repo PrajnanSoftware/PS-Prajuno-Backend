@@ -22,7 +22,10 @@ const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true, default: 'Abc@123' }, // Default password
   role: { type: String, enum: ['HR', 'Manager', 'CEO', 'Employee', 'Intern'], default: 'Intern' },
-
+  profilePic: { 
+    data: Buffer, // Binary data
+    contentType: String // Image type (jpeg, png, etc.)
+  },
   personal: {
     dob: { type: Date },
     gender: { type: String, enum: ['Male', 'Female', 'Other'] },
