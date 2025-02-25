@@ -1,6 +1,7 @@
 const User = require('../models/User');
+const bcrypt = require('bcryptjs');
 
-// Get all employees (users)
+// ✅ Get all employees
 const getEmployees = async (req, res) => {
   try {
     const employees = await User.find().select('-password'); // Exclude password
@@ -10,7 +11,20 @@ const getEmployees = async (req, res) => {
   }
 };
 
-// Add Employee (User)
+// ✅ Get a single employee by ID
+const getEmployeeById = async (req, res) => {
+  try {
+    const employee = await User.findById(req.params.id).select('-password');
+    if (!employee) {
+      return res.status(404).json({ message: 'Employee not found' });
+    }
+    res.json(employee);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// ✅ Add Employee
 const addEmployee = async (req, res) => {
   try {
     const {
@@ -26,8 +40,15 @@ const addEmployee = async (req, res) => {
       return res.status(400).json({ message: 'Email already exists' });
     }
 
+    // Hash default password
+    const hashedPassword = await bcrypt.hash('Abc@123', 10);
+
     const newEmployee = new User({
-      name, email, role, work: { department, subDepartment, jobTitle, designation, empId, empType, doj, status, workLocation, workExperience, probationPeriod },
+      name,
+      email,
+      password: hashedPassword, // Default password
+      role,
+      work: { department, subDepartment, jobTitle, designation, empId, empType, doj, status, workLocation, workExperience, probationPeriod },
       team: { reportingManagers, directReports },
       personal: { dob, gender, bloodGroup, maritalStatus, phoneNumber, alternatePhoneNumber, personalEmail, officialEmail, address },
       workweek
@@ -40,4 +61,39 @@ const addEmployee = async (req, res) => {
   }
 };
 
-module.exports = { getEmployees, addEmployee };
+// ✅ Edit Employee
+const editEmployee = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updates = req.body;
+
+    const updatedEmployee = await User.findByIdAndUpdate(id, updates, { new: true, runValidators: true }).select('-password');
+    
+    if (!updatedEmployee) {
+      return res.status(404).json({ message: 'Employee not found' });
+    }
+
+    res.json({ message: 'Employee updated successfully', employee: updatedEmployee });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// ✅ Delete Employee
+const deleteEmployee = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const deletedEmployee = await User.findByIdAndDelete(id);
+    
+    if (!deletedEmployee) {
+      return res.status(404).json({ message: 'Employee not found' });
+    }
+
+    res.json({ message: 'Employee deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+module.exports = { getEmployees, getEmployeeById, addEmployee, editEmployee, deleteEmployee };
