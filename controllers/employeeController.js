@@ -97,28 +97,39 @@ const deleteEmployee = async (req, res) => {
 };
 
 // Update Profile Picture
+const cloudinary = require("../config/cloudinary");
+
 const updateProfilePic = async (req, res) => {
   try {
     const userId = req.params.id;
 
-    // Check if the user exists
+    // Check if user exists
     const user = await User.findById(userId);
     if (!user) return res.status(404).json({ message: "User not found" });
 
-    // Check if a file is uploaded
+    // Check if file exists
     if (!req.file) return res.status(400).json({ message: "No image uploaded" });
 
-    // Update profile picture
-    user.profilePic = {
-      data: req.file.buffer,
-      contentType: req.file.mimetype
-    };
+    // Upload image to Cloudinary
+    const result = await cloudinary.uploader.upload(req.file.path, {
+      folder: "profile_pictures",
+      width: 300,
+      height: 300,
+      crop: "fill",
+    });
 
+    // Update profile picture URL in DB
+    user.profilePic = result.secure_url; // ✅ Store image URL instead of binary data
     await user.save();
-    res.status(200).json({ message: "Profile picture updated successfully" });
+
+    res.status(200).json({
+      message: "Profile picture updated successfully",
+      profilePic: user.profilePic,
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
+
 
 module.exports = { getEmployees, getEmployeeById, addEmployee, editEmployee, deleteEmployee, updateProfilePic  };
