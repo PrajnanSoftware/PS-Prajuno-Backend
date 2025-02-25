@@ -97,31 +97,38 @@ const deleteEmployee = async (req, res) => {
 };
 
 // Update Profile Picture
-const cloudinary = require("../config/cloudinary");
-
 const updateProfilePic = async (req, res) => {
   try {
+    console.log("Received request to update profile pic");
     const userId = req.params.id;
+    console.log("User ID:", userId);
 
-    // Check if user exists
     const user = await User.findById(userId);
-    if (!user) return res.status(404).json({ message: "User not found" });
+    if (!user) {
+      console.log("User not found");
+      return res.status(404).json({ message: "User not found" });
+    }
 
-    // Check if file exists
-    if (!req.file) return res.status(400).json({ message: "No image uploaded" });
+    if (!req.file) {
+      console.log("No image uploaded");
+      return res.status(400).json({ message: "No image uploaded" });
+    }
 
-    // ✅ Use `req.file.path` directly (Cloudinary Storage handles upload)
-    user.profilePic = req.file.path; // Cloudinary URL
+    console.log("File Received:", req.file);
+    user.profilePic = req.file.path;
     await user.save();
 
+    console.log("Profile updated successfully");
     res.status(200).json({
       message: "Profile picture updated successfully",
       profilePic: user.profilePic,
     });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error("Server Error:", error);
+    res.status(500).json({ message: "Internal server error", error: error.message });
   }
 };
+
 
 
 
