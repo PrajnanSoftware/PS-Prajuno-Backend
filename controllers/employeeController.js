@@ -110,16 +110,8 @@ const updateProfilePic = async (req, res) => {
     // Check if file exists
     if (!req.file) return res.status(400).json({ message: "No image uploaded" });
 
-    // Upload image to Cloudinary
-    const result = await cloudinary.uploader.upload(req.file.path, {
-      folder: "profile_pictures",
-      width: 300,
-      height: 300,
-      crop: "fill",
-    });
-
-    // Update profile picture URL in DB
-    user.profilePic = result.secure_url; // ✅ Store image URL instead of binary data
+    // ✅ Use `req.file.path` directly (Cloudinary Storage handles upload)
+    user.profilePic = req.file.path; // Cloudinary URL
     await user.save();
 
     res.status(200).json({
@@ -130,6 +122,7 @@ const updateProfilePic = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
 
 
 module.exports = { getEmployees, getEmployeeById, addEmployee, editEmployee, deleteEmployee, updateProfilePic  };
