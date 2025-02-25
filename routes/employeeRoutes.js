@@ -2,29 +2,36 @@ const express = require("express");
 const multer = require("multer");
 const {
   getEmployees,
+  getEmployeeById,
   addEmployee,
-  updateProfilePic, // Ensure this is correctly imported
-  getProfilePic,    // Ensure this is correctly imported
-} = require("../controllers/employeeController"); // Correct path
-
+  editEmployee,
+  deleteEmployee,
+  updateProfilePic,
+} = require("../controllers/employeeController");
 const { protect, adminOnly } = require("../middlewares/authMiddleware");
 
 const router = express.Router();
 
-// Multer setup for image uploads
+// Multer setup for profile picture upload
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
-// Get all employees
+// ✅ Get all employees
 router.get("/", protect, getEmployees);
 
-// Add employee with profile picture
-router.post("/", protect, adminOnly, upload.single("profilePic"), addEmployee);
+// ✅ Get a single employee by ID
+router.get("/:id", protect, getEmployeeById);
 
-// Get Profile Picture
-router.get("/:id/profile-pic", getProfilePic); // Ensure `getProfilePic` exists in controller
+// ✅ Add an employee
+router.post("/", protect, adminOnly, addEmployee);
 
-// Update Profile Picture
+// ✅ Edit an employee
+router.put("/:id", protect, adminOnly, editEmployee);
+
+// ✅ Delete an employee
+router.delete("/:id", protect, adminOnly, deleteEmployee);
+
+// ✅ Update Profile Picture
 router.put("/:id/profile-pic", protect, upload.single("profilePic"), updateProfilePic);
 
 module.exports = router;
