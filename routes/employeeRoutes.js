@@ -13,10 +13,6 @@ const { protect, adminOnly } = require("../middlewares/authMiddleware");
 
 const router = express.Router();
 
-// Multer setup for profile picture upload
-const storage = multer.memoryStorage();
-const upload = multer({ storage });
-
 // ✅ Get all employees
 router.get("/", protect, getEmployees);
 
