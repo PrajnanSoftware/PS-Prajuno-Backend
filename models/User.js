@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 
 const addressSchema = new mongoose.Schema({
   addressLine1: { type: String, required: true },
@@ -39,7 +39,7 @@ const userSchema = new mongoose.Schema({
   },
 
   work: {
-    empId: { type: String, unique: true },
+    empId: { type: String, unique: true }, // Auto-generated if required
     empType: { type: String, enum: ['Permanent', 'Contract', 'Intern'] },
     doj: { type: Date },
     status: { type: String, enum: ['Active', 'Inactive', 'On Leave', 'Resigned'], default: 'Active' },
@@ -70,9 +70,14 @@ const userSchema = new mongoose.Schema({
 // Hash password before saving
 userSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next();
-  const salt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password, salt);
-  next();
+  
+  try {
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+    next();
+  } catch (error) {
+    next(error);
+  }
 });
 
 module.exports = mongoose.model('User', userSchema);
