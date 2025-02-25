@@ -8,7 +8,7 @@ const {
   deleteEmployee,
   updateProfilePic,
 } = require("../controllers/employeeController");
-const upload = require("../middleware/uploadMiddleware");
+const upload = require("../middlewares/uploadMiddleware");
 const { protect, adminOnly } = require("../middlewares/authMiddleware");
 
 const router = express.Router();
