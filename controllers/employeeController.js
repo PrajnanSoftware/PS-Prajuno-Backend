@@ -121,5 +121,4 @@ const updateProfilePic = async (req, res) => {
   }
 };
 
-
 module.exports = { getEmployees, getEmployeeById, addEmployee, editEmployee, deleteEmployee, updateProfilePic  };
