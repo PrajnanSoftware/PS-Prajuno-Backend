@@ -4,6 +4,6 @@ const { protect } = require("../middlewares/authMiddleware");
 const router = express.Router();
 
 router.get('/', protect, getProfile);
-router.put('/', protect, editProfile);
+router.put('/:id', protect, editProfile);
 
 module.exports = router;
