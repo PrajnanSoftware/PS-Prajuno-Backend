@@ -2,20 +2,20 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
 const addressSchema = new mongoose.Schema({
-  addressLine1: { type: String, required: true },
+  addressLine1: { type: String },
   addressLine2: { type: String },
-  city: { type: String, required: true },
-  state: { type: String, required: true },
-  country: { type: String, required: true },
-  pincode: { type: String, required: true }
-});
+  city: { type: String },
+  state: { type: String },
+  country: { type: String },
+  pincode: { type: String }
+}, { _id: false });
 
 const workweekSchema = new mongoose.Schema({
-  title: { type: String, required: true },
-  description: { type: String, required: true },
-  effectiveDate: { type: Date, required: true },
-  condition: { type: String, enum: ['1-day week off', '2-days week off'], required: true }
-});
+  title: { type: String },
+  description: { type: String },
+  effectiveDate: { type: Date },
+  condition: { type: String, enum: ['1-day week off', '2-days week off'] }
+}, { _id: false });
 
 const userSchema = new mongoose.Schema({
   name: { type: String, required: true },
