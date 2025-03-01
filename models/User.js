@@ -26,7 +26,7 @@ const userSchema = new mongoose.Schema({
 
   personal: {
     dob: { type: Date, default: null },
-    gender: { type: String, enum: ['Male', 'Female', 'Other'], default: '' },
+    gender: { type: String, enum: ['Male', 'Female', 'Other', ''], default: '' },
     bloodGroup: { type: String, default: '' },
     maritalStatus: { type: String, enum: ['Single', 'Married', 'Divorced', 'Widowed'], default: 'Single' },
     phoneNumber: { type: String, default: '' },
