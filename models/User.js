@@ -2,12 +2,12 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
 const addressSchema = new mongoose.Schema({
-  addressLine1: { type: String },
-  addressLine2: { type: String },
-  city: { type: String },
-  state: { type: String },
-  country: { type: String },
-  pincode: { type: String }
+  addressLine1: { type: String, default: "" },  
+  addressLine2: { type: String, default: "" },
+  city: { type: String, default: "N/A" },
+  state: { type: String, default: "N/A" },
+  country: { type: String, default: "India" },
+  pincode: { type: String, default: "000000" }
 }, { _id: false });
 
 const workweekSchema = new mongoose.Schema({
